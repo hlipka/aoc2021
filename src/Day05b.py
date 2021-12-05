@@ -33,16 +33,35 @@ class Line:
         for i in range(start, end):
             amap[i][self.y_start] = amap[i][self.y_start] + 1
 
+    def draw_line_xy(self, amap):
+        if self.x_start > self.x_end:
+            start_x = self.x_end
+            start_y = self.y_end
+            end_x = self.x_start
+            end_y = self.y_start
+        else:
+            start_x = self.x_start
+            start_y = self.y_start
+            end_x = self.x_end
+            end_y = self.y_end
+        if start_y > end_y:
+            dir = -1
+        else:
+            dir = 1
+        length = end_x - start_x + 1
+        for i in range(0, length):
+            amap[start_x+i][start_y+i*dir] = amap[start_x+i][start_y+i*dir] + 1
+
     def draw_line(self, amap):
         if self.x_start == self.x_end:
             self.draw_line_x(amap)
         elif self.y_start == self.y_end:
             self.draw_line_y(amap)
-        return
+        else:
+            self.draw_line_xy(amap)
 
 def run(fname):
     fin = open(fname)
-    lines = []
     amap = np.full((1000, 1000), 0)
 
     for line in fin:
@@ -50,10 +69,11 @@ def run(fname):
         if line == '':
             break
         l = Line(line)
-        # l.dump()
+        l.dump()
         l.draw_line(amap)
         # print(amap.transpose())
 
+    # print(amap.transpose())
     mark = amap.flat > 1
     crosses = amap.flat[mark]
     print(len(crosses))
