@@ -1,6 +1,8 @@
+# NOTE: this is too slow for the full data set - see day15c for a faster solution
+
 class Node:
     def __init__(self, value):
-        self.value = int(value)-int(0)
+        self.value = value
         self.pre = None
         self.length = 10000000
         self.x = 0
@@ -21,7 +23,7 @@ class Node:
 
 
 def parse_line(line):
-    result = list(map(lambda c: Node(c), list(line)))
+    result = list(map(lambda c: Node(int(c)-int(0)), list(line)))
     return result
 
 
@@ -50,26 +52,61 @@ def find_path(map, open_list, goal_x, goal_y):
                     nb.length = alt
                     nb.pre = n
                     open_list.sort(reverse=True)
+    print("queue finished without visiting end node")
+
+
+def copy_cave_row(row, ofs):
+    result = []
+    for n in row:
+        value = n.value + ofs
+        if value > 9:
+            value = value - 9
+        result.append(Node(value))
+    return result
+
+
+def copy_cave(map, ofs):
+    result = []
+    for row in map:
+        arow = []
+        for n in row:
+            value = n.value + ofs
+            if value > 9:
+                value = value - 9
+            arow.append(Node(value))
+        result.append(arow)
+    return result
 
 
 def run(fname):
     fin = open(fname)
     map = []
     open_list = []
-    y = 0
     for line in fin:
         if line.strip() != "":
             row = parse_line(line.strip())
-            x = 0
-            for n in row:
-                open_list.append(n)
-                n.x = x
-                n.y = y
-                x = x + 1
-            y = y + 1
-            map.append(row)
+            full_row = row.copy()
+            full_row.extend(copy_cave_row(row, 1))
+            full_row.extend(copy_cave_row(row, 2))
+            full_row.extend(copy_cave_row(row, 3))
+            full_row.extend(copy_cave_row(row, 4))
+            map.append(full_row)
 
-    find_path(map, open_list, len(map[9])-1, y-1)
+    full_map = map.copy()
+    full_map.extend(copy_cave(map, 1))
+    full_map.extend(copy_cave(map, 2))
+    full_map.extend(copy_cave(map, 3))
+    full_map.extend(copy_cave(map, 4))
+
+    max_x = len(full_map[0])
+    max_y = len(full_map)
+    for x in range(0, max_x):
+        for y in range(0, max_y):
+            full_map[y][x].x = x
+            full_map[y][x].y = y
+            open_list.append(full_map[x][y])
+
+    find_path(full_map, open_list, max_x-1, max_y-1)
 
 
 # Press the green button in the gutter to run the script.
