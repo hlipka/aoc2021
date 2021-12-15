@@ -44,7 +44,7 @@ def find_path(a_map, goal_x, goal_y):
 
         if n.x == goal_x and n.y == goal_y:
             print("finished ", n.length)
-            return n
+            return
 
         nbs = []
         if n.x > 0:
@@ -55,6 +55,7 @@ def find_path(a_map, goal_x, goal_y):
             nbs.append(a_map[n.y - 1][n.x])
         if n.y < goal_y:
             nbs.append(a_map[n.y + 1][n.x])
+
         for nb in nbs:
             tg = n.length + nb.value
             if tg < nb.length:

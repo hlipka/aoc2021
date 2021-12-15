@@ -1,4 +1,14 @@
-# NOTE: this is too slow for the full data set - see day15c for a faster solution
+# let's try to speed up day15b, so it runs in a reasonable time
+import datetime
+# we can skip the manual sort with this libray
+from sortedcontainers import SortedKeyList
+# observation: with removing / re-adding values this get slower over time
+# probably because we get more distinct keys then
+# but it still is about 10 times as fast as using a list and sorting it (day15b)
+# and 3 times as fast as using list (for sort) + set (for lookup)
+
+# 1400 seconds seems OK-ish
+
 
 class Node:
     def __init__(self, value):
@@ -31,9 +41,16 @@ def parse_line(line):
 def find_path(map, open_list, goal_x, goal_y):
     map[0][0].length = 0
     map[0][0].value = 0
-    open_list.sort(reverse=True)
+    start = datetime.datetime.now()
+    count = 0
     while len(open_list) > 0:
-        n = open_list.pop()
+        if 0 == count % 100:
+            now = datetime.datetime.now()
+            delta = (now - start).total_seconds()
+            print(count, int(delta), int(count / delta), len(open_list))
+        count = count + 1
+        
+        n = open_list.pop(0)
         if n.x == goal_x and n.y == goal_y:
             print("finished ", n.length)
             return
@@ -49,12 +66,16 @@ def find_path(map, open_list, goal_x, goal_y):
             nbs.append(map[n.y+1][n.x])
 
         for nb in nbs:
-            if nb in open_list:
+            try:
+                pos = open_list.index(nb)  # throws ValueError when not found
                 alt = n.length + nb.value
                 if alt < nb.length:
+                    del open_list[pos]  # remove so we can re-add with new values
                     nb.length = alt
                     nb.pre = n
-                    open_list.sort(reverse=True)
+                    open_list.add(nb)
+            except ValueError:
+                pass
     print("queue finished without visiting end node")
 
 
@@ -84,7 +105,7 @@ def copy_cave(map, ofs):
 def run(fname):
     fin = open(fname)
     map = []
-    open_list = []
+    open_list = SortedKeyList(key=lambda n: n.length)
     for line in fin:
         if line.strip() != "":
             row = parse_line(line.strip())
@@ -107,7 +128,7 @@ def run(fname):
         for y in range(0, max_y):
             full_map[y][x].x = x
             full_map[y][x].y = y
-            open_list.append(full_map[x][y])
+            open_list.add(full_map[x][y])
 
     find_path(full_map, open_list, max_x-1, max_y-1)
 
