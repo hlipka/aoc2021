@@ -59,6 +59,42 @@ class Packet:
             result += p.sum_versions()
         return result
 
+    def get_value(self):
+        if self.type == 4:
+            return self.value
+        if self.type == 0:
+            s = 0
+            for p in self.packets:
+                s += p.get_value()
+            return s
+        if self.type == 1:
+            s = 1
+            for p in self.packets:
+                s *= p.get_value()
+            return s
+        if self.type == 2:
+            s = 100000000
+            for p in self.packets:
+                s = min(s, p.get_value())
+            return s
+        if self.type == 3:
+            s = 0
+            for p in self.packets:
+                s = max(s, p.get_value())
+            return s
+        if self.type == 5:
+            if self.packets[0].get_value() > self.packets[1].get_value():
+                return 1
+            return 0
+        if self.type == 6:
+            if self.packets[0].get_value() < self.packets[1].get_value():
+                return 1
+            return 0
+        if self.type == 7:
+            if self.packets[0].get_value() == self.packets[1].get_value():
+                return 1
+            return 0
+
 
 def get_bits(c):
     if c == '0':
@@ -101,7 +137,7 @@ def parse_packet_line(line):
     for c in line:
         bits.extend(get_bits(c))
     p = Packet(bits)
-    print("version_sum", p.sum_versions())
+    print("result", p.get_value())
 
 
 def run(f_name):
@@ -110,14 +146,14 @@ def run(f_name):
     parse_packet_line(line.strip())
 
 
-
-#parse_packet_line("D2FE28")
-#parse_packet_line("38006F45291200")
-#parse_packet_line("EE00D40C823060")
-#parse_packet_line("8A004A801A8002F478")
-#parse_packet_line("620080001611562C8802118E34")
-#parse_packet_line("C0015000016115A2E0802F182340")
-#parse_packet_line("A0016C880162017C3686B18A3D4780")
+# parse_packet_line("C200B40A82")
+# parse_packet_line("04005AC33890")
+# parse_packet_line("880086C3E88112")
+# parse_packet_line("CE00C43D881120")
+# parse_packet_line("D8005AC2A8F0")
+# parse_packet_line("F600BC2D8F")
+# parse_packet_line("9C005AC2F8F0")
+# parse_packet_line("9C0141080250320F1802104A08")
 
 if __name__ == '__main__':
     run('../data/day16.txt')
