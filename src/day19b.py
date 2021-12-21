@@ -50,6 +50,7 @@ class Scanner:
     def __init__(self):
         self.beacons = []
         self.transformed_beacons = []
+        self.offset = [0, 0, 0]
 
     def add_beacon(self, beacon):
         self.beacons.append(beacon)
@@ -87,9 +88,9 @@ class Scanner:
 
         # add all other beacons to our list, and shift them to the correct place
         for beacon in scanner.beacons:
-            # skip duplicates when doing so
             if beacon not in self.beacons:
                 self.beacons.append(beacon)
+        # skip duplicates when doing so
 
     def rotate(self, transformer):
         for beacon in self.beacons:
@@ -98,6 +99,7 @@ class Scanner:
             beacon.prepare(self.beacons)
 
     def move(self, x, y, z):
+        self.offset = [x, y, z]
         for beacon in self.beacons:
             beacon.move(x, y, z)
 
@@ -163,6 +165,10 @@ def parse_coord(line):
     return Beacon(int(coords[0]), int(coords[1]), int(coords[2]))
 
 
+def get_dist(o1, o2):
+    return abs(o1[0] - o2[0]) + abs(o1[1] - o2[1]) + abs(o1[2] - o2[2])
+
+
 def run(f_name):
     scanners = []
     scanner = None
@@ -180,7 +186,6 @@ def run(f_name):
 
     # somehow, when we start with scanner 0 as suggested, scanner 5 is not matched
     # but when we start with #5 it works. I don't ask why ;-)
-    # (potential reason:  we do not re-calculate the distances between beacons after adding the to the center)
     central_scanner = scanners[5]
     # add all other scanners to the open list
     open_scanners = []
@@ -204,7 +209,20 @@ def run(f_name):
             for sc in open_scanners:
                 print(sc)
             break
+
     print(len(central_scanner.beacons))
+
+    # calculate all distances between all scanner pairs, and select the max
+    # no need to get smart here, there are not enough pairs
+    max_dist = 0
+    for s1 in scanners:
+        for s2 in scanners:
+            dist = get_dist(s1.offset, s2.offset)
+            if dist > max_dist:
+                max_dist = dist
+
+    print(max_dist)
+
 
 if __name__ == '__main__':
     run('../data/day19.txt')
