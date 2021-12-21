@@ -5,8 +5,8 @@ def move_crabs(crabs, pos):
     return fuel
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     crab_line = fin.readline().strip()
     crabs = list(map(lambda f: int(f), crab_line.split(',')))
     print(crabs)
@@ -14,6 +14,8 @@ def run(fname):
     max_pos = max(crabs)
     min_fuel = move_crabs(crabs, max_pos)
 
+    # it does not make sense to move outside the lines of crabs, so the range is from min to max
+    # for each potential position, move all crabs to it and calculate the needed fuel
     for pos in range(min_pos, max_pos):
         fuel = move_crabs(crabs, pos)
         if fuel < min_fuel:
@@ -23,6 +25,5 @@ def run(fname):
     print(min_fuel)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day07.txt')

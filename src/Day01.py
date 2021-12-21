@@ -1,19 +1,18 @@
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     line = fin.readline()
-    lastnum = int(line)
+    last_num = int(line)
     increase = 0
 
     for line in fin:
         if line != "":
             num = int(line)
-            if num > lastnum:
-                increase = increase +1
-            lastnum = num
+            if num > last_num:
+                increase = increase + 1
+            last_num = num
 
     print(increase)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day01.txt')

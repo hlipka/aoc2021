@@ -1,6 +1,5 @@
 import math
 
-
 transformations = [
     # x is facing x
     lambda x, y, z: (x, y, z),
@@ -36,7 +35,7 @@ transformations = [
 
 
 def calculate_distance(v):
-    return round(math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]))
+    return round(math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]))
 
 
 def get_distance_matches(dists, other_dists):
@@ -165,10 +164,10 @@ def parse_coord(line):
     return Beacon(int(coords[0]), int(coords[1]), int(coords[2]))
 
 
-def run(fname):
+def run(f_name):
     scanners = []
     scanner = None
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         line = line.strip()
         if line != '':
@@ -192,7 +191,5 @@ def run(fname):
     # integrate match into scanner0, remove from open list
 
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day19.txt')

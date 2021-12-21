@@ -49,7 +49,7 @@ class Cell:
 
 def parse_line(line, cells):
     for c in line:
-        cells.append(Cell(int(c)-int('0')))
+        cells.append(Cell(int(c) - int('0')))
 
 
 def fill_neighbour(cell, cells, x, y):
@@ -62,12 +62,12 @@ def fill_neighbour(cell, cells, x, y):
 
 def fill_neighbour_cells(cell, cells, x, y):
     fill_neighbour(cell, cells, x - 1, y - 1)
-    fill_neighbour(cell, cells, x,     y - 1)
+    fill_neighbour(cell, cells, x, y - 1)
     fill_neighbour(cell, cells, x + 1, y - 1)
     fill_neighbour(cell, cells, x - 1, y)
     fill_neighbour(cell, cells, x + 1, y)
     fill_neighbour(cell, cells, x - 1, y + 1)
-    fill_neighbour(cell, cells, x,     y + 1)
+    fill_neighbour(cell, cells, x, y + 1)
     fill_neighbour(cell, cells, x + 1, y + 1)
 
 
@@ -78,32 +78,34 @@ def fill_neighbours(cells):
             fill_neighbour_cells(cell, cells, x, y)
             cell.set_pos(x, y)
 
-def run(fname):
+
+def run(f_name):
     cell_data = []
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         parse_line(line.strip(), cell_data)
 
-    cells = np.array(cell_data, dtype=object).reshape( (10, 10))
+    cells = np.array(cell_data, dtype=object).reshape((10, 10))
     fill_neighbours(cells)
     all_cells = np.reshape(cells, 100)
-    for round in range(0, 2000):
+    # similar to part 1
+    for round_number in range(0, 2000):  # 2000 seemed to be high enough
         round_score = 0
         for cell in all_cells:
             cell.round()
         for cell in all_cells:
             cell.do_flash()
         for cell in all_cells:
+            # need to count the number of cells which did flash in this round
             if cell.did_flash():
-                round_score = round_score +1
+                round_score = round_score + 1
         for cell in all_cells:
             cell.end_round()
+        # if all cells did flash, stop
         if round_score >= 100:
-            print(round + 1)
+            print(round_number + 1)
             break
 
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day11.txt')

@@ -1,4 +1,4 @@
-# one of the downward steps ends up exactly at y=0 (because its a mirror of the upwards steps)
+# one of the downward steps ends up exactly at y=0 (because it is a mirror of the upwards steps)
 # the farthest next step is then ending up at y_min
 # so the initial speed is y_min-1
 # and the height is the sum of all numbers up to that value

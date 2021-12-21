@@ -94,8 +94,8 @@ class Data:
         self.digit(5, five)
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     data = []
     summe = 0
     for line in fin:
@@ -103,12 +103,13 @@ def run(fname):
         d.map_wires()
         data.append(d)
     for dat in data:
-        number = 1000*dat.get_number(dat.display_patterns[0]) + 100*dat.get_number(dat.display_patterns[1]) + 10*dat.get_number(dat.display_patterns[2]) + dat.get_number(dat.display_patterns[3])
+        number = 1000 * dat.get_number(dat.display_patterns[0]) + 100 * dat.get_number(
+            dat.display_patterns[1]) + 10 * dat.get_number(dat.display_patterns[2]) + dat.get_number(
+            dat.display_patterns[3])
         summe = summe + number
 
     print(summe)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day08.txt')

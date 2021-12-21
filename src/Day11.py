@@ -27,18 +27,17 @@ class Cell:
         self.energy = self.energy + 1
 
     def do_flash(self):
+        # when the cell has high enough energy and has not flashed in this round
+        # flash itself, distribute energy to neighbours
         if self.energy > 9 and self.mark is False:
-#            print('flash (%d, %d)' % (self.x, self.y))
-#            print('->')
             self.mark = True
             self.flashes = self.flashes + 1
             for c in self.nb:
                 c.increase()
-#            print('<-')
 
     def increase(self):
-#        print('increase in (%d, %d)' % (self.x, self.y))
         self.energy = self.energy + 1
+        # when the flash from a neighbour increases energy enough, fash this cell as well
         if self.energy > 9 and self.mark is False:
             self.do_flash()
 
@@ -53,7 +52,7 @@ class Cell:
 
 def parse_line(line, cells):
     for c in line:
-        cells.append(Cell(int(c)-int('0')))
+        cells.append(Cell(int(c) - int('0')))
 
 
 def fill_neighbour(cell, cells, x, y):
@@ -66,12 +65,12 @@ def fill_neighbour(cell, cells, x, y):
 
 def fill_neighbour_cells(cell, cells, x, y):
     fill_neighbour(cell, cells, x - 1, y - 1)
-    fill_neighbour(cell, cells, x,     y - 1)
+    fill_neighbour(cell, cells, x, y - 1)
     fill_neighbour(cell, cells, x + 1, y - 1)
     fill_neighbour(cell, cells, x - 1, y)
     fill_neighbour(cell, cells, x + 1, y)
     fill_neighbour(cell, cells, x - 1, y + 1)
-    fill_neighbour(cell, cells, x,     y + 1)
+    fill_neighbour(cell, cells, x, y + 1)
     fill_neighbour(cell, cells, x + 1, y + 1)
 
 
@@ -82,34 +81,37 @@ def fill_neighbours(cells):
             fill_neighbour_cells(cell, cells, x, y)
             cell.set_pos(x, y)
 
-def run(fname):
+
+def run(f_name):
     cell_data = []
-    fin = open(fname)
+    fin = open(f_name)
+    # parse the map into a list of cells
     for line in fin:
         parse_line(line.strip(), cell_data)
 
-    cells = np.array(cell_data, dtype=object).reshape( (10, 10))
+    # make a map from the list
+    cells = np.array(cell_data, dtype=object).reshape((10, 10))
+    # each cell needs to know its neighbours
     fill_neighbours(cells)
+    # it is easier to handle if we have a flat array instead of a map
     all_cells = np.reshape(cells, 100)
     flashes = 0
-    for round in range(0, 100):
-#        print(cells)
+    for round_number in range(0, 100):
+        # increase energy in the cells
         for cell in all_cells:
             cell.round()
-#        print(cells)
+        # flash all cells - this propagates energy and flashes other cells as well
         for cell in all_cells:
             cell.do_flash()
-#        print(cells)
+        # count cells which did flash
         for cell in all_cells:
             if cell.did_flash():
                 flashes = flashes + 1
+        # reset energy values and flash markers
         for cell in all_cells:
             cell.end_round()
-#        print(cells)
-        print(round, flashes)
+        print(round_number, flashes)
 
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day11.txt')

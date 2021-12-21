@@ -1,3 +1,4 @@
+# similar to part 1, but the fuel is calculated differently
 def move_crabs(crabs, pos):
     fuel = 0
     for crab in crabs:
@@ -6,8 +7,8 @@ def move_crabs(crabs, pos):
     return fuel
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     crab_line = fin.readline().strip()
     crabs = list(map(lambda f: int(f), crab_line.split(',')))
     print(crabs)
@@ -24,6 +25,5 @@ def run(fname):
     print(min_fuel)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day07.txt')

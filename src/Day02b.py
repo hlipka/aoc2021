@@ -26,20 +26,20 @@ class Position:
 
 
 def parse(line):
-    parts = line.split(' ',1)
+    parts = line.split(' ', 1)
     return Command(parts[0], int(parts[1]))
 
-def run(fname):
-    fin = open(fname)
+
+def run(f_name):
+    fin = open(f_name)
     pos = Position()
     for line in fin:
         if line != "":
             cmd = parse(line)
             pos.update(cmd)
 
-    print(pos.h*pos.d)
+    print(pos.h * pos.d)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day02.txt')

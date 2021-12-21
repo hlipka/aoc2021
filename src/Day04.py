@@ -3,14 +3,15 @@ import numpy as np
 
 class Board:
     def __init__(self, lines):
-        ml = ' '.join(lines).replace('\n','')
+        ml = ' '.join(lines).replace('\n', '')
         self.data = np.fromstring(ml, sep=' ')
         self.data = self.data.reshape(5, 5)
 
     def cross(self, num):
-        self.data[self.data == num]=-1
+        self.data[self.data == num] = -1
 
-    def row_selected(self, row):
+    @staticmethod
+    def row_selected(row):
         return (row == -1).all()
 
     def is_winner(self):
@@ -26,22 +27,23 @@ class Board:
         return self.data.flat[get]
 
 
-
-def run(fname):
+def run(f_name):
     boards = []
-    fin = open(fname)
+    fin = open(f_name)
     line = fin.readline()
-    nums = line.replace('\n','').split(',')
+    nums = line.replace('\n', '').split(',')
     fin.readline()
-    boardlines=[]
-    for l in fin:
-        if l == '\n':
-            boards.append(Board(boardlines))
-            boardlines = []
+    board_lines = []
+    for line in fin:
+        if line == '\n':
+            boards.append(Board(board_lines))
+            board_lines = []
         else:
-            boardlines.append(l)
+            board_lines.append(line)
+
+    # simulate all boards simultaneously
     for num in nums:
-        print("cross "+num)
+        print("cross " + num)
         for board in boards:
             board.cross(int(num))
             if board.is_winner():
@@ -51,11 +53,10 @@ def run(fname):
                 print(us)
                 s = sum(us)
                 print(s)
-                print(int(num)*s)
+                print(int(num) * s)
                 return
     print("no winner found")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day04.txt')

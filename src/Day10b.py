@@ -30,6 +30,7 @@ def parse_line(line):
     for c in line:
         if not parse_char(c, stack):
             return 0  # discard corrupted lines (with non-matching chars)
+    # the needed characters can be found from the reversed stack
     stack.reverse()
     score = 0
     for c in stack:
@@ -44,9 +45,9 @@ def parse_line(line):
     return score
 
 
-def run(fname):
+def run(f_name):
     scores = []
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         if line.strip() != "":
             score = parse_line(line.strip())
@@ -54,9 +55,8 @@ def run(fname):
                 scores.append(score)
     scores.sort()
     print(scores)
-    print(scores[math.floor(len(scores)/2)])
+    print(scores[math.floor(len(scores) / 2)])
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day10.txt')

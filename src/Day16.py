@@ -110,14 +110,14 @@ def run(f_name):
     parse_packet_line(line.strip())
 
 
-
-#parse_packet_line("D2FE28")
-#parse_packet_line("38006F45291200")
-#parse_packet_line("EE00D40C823060")
-#parse_packet_line("8A004A801A8002F478")
-#parse_packet_line("620080001611562C8802118E34")
-#parse_packet_line("C0015000016115A2E0802F182340")
-#parse_packet_line("A0016C880162017C3686B18A3D4780")
+# test messages
+# parse_packet_line("D2FE28")
+# parse_packet_line("38006F45291200")
+# parse_packet_line("EE00D40C823060")
+# parse_packet_line("8A004A801A8002F478")
+# parse_packet_line("620080001611562C8802118E34")
+# parse_packet_line("C0015000016115A2E0802F182340")
+# parse_packet_line("A0016C880162017C3686B18A3D4780")
 
 if __name__ == '__main__':
     run('../data/day16.txt')

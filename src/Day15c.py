@@ -22,7 +22,7 @@ class Node:
 
 
 def parse_line(line):
-    result = list(map(lambda c: Node(int(c)-int(0)), list(line)))
+    result = list(map(lambda c: Node(int(c) - int(0)), list(line)))
     return result
 
 
@@ -116,9 +116,8 @@ def run(f_name):
             full_map[y][x].x = x
             full_map[y][x].y = y
 
-    find_path(full_map, max_x-1, max_y-1)
+    find_path(full_map, max_x - 1, max_y - 1)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day15.txt')

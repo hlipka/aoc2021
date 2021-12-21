@@ -1,6 +1,7 @@
 import re
 import numpy as np
 
+# pattern for a line
 pattern = r'(\d+),(\d+) -> (\d+),(\d+)'
 
 
@@ -23,13 +24,13 @@ class Line:
 
     def draw_line_x(self, amap):
         start = min(self.y_start, self.y_end)
-        end = max(self.y_start, self.y_end)+1
+        end = max(self.y_start, self.y_end) + 1
         for i in range(start, end):
             amap[self.x_start][i] = amap[self.x_start][i] + 1
 
     def draw_line_y(self, amap):
         start = min(self.x_start, self.x_end)
-        end = max(self.x_start, self.x_end)+1
+        end = max(self.x_start, self.x_end) + 1
         for i in range(start, end):
             amap[i][self.y_start] = amap[i][self.y_start] + 1
 
@@ -40,25 +41,26 @@ class Line:
             self.draw_line_y(amap)
         return
 
-def run(fname):
-    fin = open(fname)
-    lines = []
+
+def run(f_name):
+    fin = open(f_name)
     amap = np.full((1000, 1000), 0)
 
     for line in fin:
         line = line.strip()
         if line == '':
             break
-        l = Line(line)
+        parsed_line = Line(line)
         # l.dump()
-        l.draw_line(amap)
+        parsed_line.draw_line(amap)
         # print(amap.transpose())
 
+    # create a new array which marks all places crossed more than once
     mark = amap.flat > 1
+    # select these elements, and sum them up
     crosses = amap.flat[mark]
     print(len(crosses))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day05.txt')

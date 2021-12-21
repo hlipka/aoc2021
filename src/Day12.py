@@ -1,4 +1,3 @@
-
 class Cave:
     def __init__(self, name):
         self.name = name
@@ -41,25 +40,28 @@ def parse_line(line, caves):
     cave2.add_target(cave1)
 
 
-def visit_paths(path, next, paths):
-    if next.is_end():
-        path.append(next)
+def visit_paths(path, next_cave, paths):
+    # huzzah!
+    if next_cave.is_end():
+        path.append(next_cave)
         paths.append(path)
         return
-    if next.is_big():
-        path.append(next)
-        for t in next.targets:
-            visit_paths(list(path), t, paths)
+    # when we are in a big cave, just continue all possible paths
+    if next_cave.is_big():
+        path.append(next_cave)
+        for t in next_cave.targets:
+            visit_paths(list(path), t, paths)  # continue with a copy of the path object
     else:
-        if next not in path:
-            path.append(next)
-            for t in next.targets:
+        # when we would enter a small cave, check that we did not visit it already
+        if next_cave not in path:
+            path.append(next_cave)
+            for t in next_cave.targets:
                 visit_paths(list(path), t, paths)
 
 
-def run(fname):
-    caves = {}
-    fin = open(fname)
+def run(f_name):
+    caves = {}  # we map caves from their name to heir data
+    fin = open(f_name)
     for line in fin:
         if len(line.strip()) > 0:
             parse_line(line.strip(), caves)
@@ -67,13 +69,12 @@ def run(fname):
     start = caves['start']
     paths = []
 
-    path = []
-    visit_paths(path, start, paths)
+    # start the visit with the first cave and an empty path
+    visit_paths([], start, paths)
 
     print(paths)
     print(len(paths))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day12.txt')

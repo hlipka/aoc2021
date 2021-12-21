@@ -23,13 +23,13 @@ class Line:
 
     def draw_line_x(self, amap):
         start = min(self.y_start, self.y_end)
-        end = max(self.y_start, self.y_end)+1
+        end = max(self.y_start, self.y_end) + 1
         for i in range(start, end):
             amap[self.x_start][i] = amap[self.x_start][i] + 1
 
     def draw_line_y(self, amap):
         start = min(self.x_start, self.x_end)
-        end = max(self.x_start, self.x_end)+1
+        end = max(self.x_start, self.x_end) + 1
         for i in range(start, end):
             amap[i][self.y_start] = amap[i][self.y_start] + 1
 
@@ -44,13 +44,14 @@ class Line:
             start_y = self.y_start
             end_x = self.x_end
             end_y = self.y_end
+        # similar to the first part, but with diagonal lines as well
         if start_y > end_y:
-            dir = -1
+            direction = -1
         else:
-            dir = 1
+            direction = 1
         length = end_x - start_x + 1
         for i in range(0, length):
-            amap[start_x+i][start_y+i*dir] = amap[start_x+i][start_y+i*dir] + 1
+            amap[start_x + i][start_y + i * direction] = amap[start_x + i][start_y + i * direction] + 1
 
     def draw_line(self, amap):
         if self.x_start == self.x_end:
@@ -60,17 +61,18 @@ class Line:
         else:
             self.draw_line_xy(amap)
 
-def run(fname):
-    fin = open(fname)
+
+def run(f_name):
+    fin = open(f_name)
     amap = np.full((1000, 1000), 0)
 
     for line in fin:
         line = line.strip()
         if line == '':
             break
-        l = Line(line)
-        l.dump()
-        l.draw_line(amap)
+        parsed_line = Line(line)
+        # parsed_line.dump()
+        parsed_line.draw_line(amap)
         # print(amap.transpose())
 
     # print(amap.transpose())
@@ -79,6 +81,5 @@ def run(fname):
     print(len(crosses))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day05.txt')

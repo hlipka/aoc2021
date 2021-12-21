@@ -1,6 +1,5 @@
 import math
 
-
 OPEN = '['
 CLOSE = ']'
 
@@ -74,9 +73,9 @@ def reduce_number(number):
         did_action = False
         if explode_pos != -1:
             #            print("explode")
-            left = number[explode_pos+1]
-            right = number[explode_pos+2]
-            number[explode_pos:explode_pos+4] = [0]
+            left = number[explode_pos + 1]
+            right = number[explode_pos + 2]
+            number[explode_pos:explode_pos + 4] = [0]
             add_to_left(number, explode_pos - 1, left)
             add_to_right(number, explode_pos + 1, right)
             did_action = True
@@ -86,16 +85,16 @@ def reduce_number(number):
                 #                print("split")
                 value = number[split_pos]
                 half = value / 2
-                number[split_pos:split_pos+1] = [OPEN, math.floor(half), math.ceil(half), CLOSE]
+                number[split_pos:split_pos + 1] = [OPEN, math.floor(half), math.ceil(half), CLOSE]
                 did_action = True
     return number
 
 
 def mag1(number):
-    for pos in range(0, len(number)-3):
-        if number[pos] == OPEN and number[pos+3] == CLOSE \
-                and isinstance(number[pos+1], int) and isinstance(number[pos+2], int):
-            number[pos:pos+4] = [3 * number[pos+1] + 2 * number[pos+2]]
+    for pos in range(0, len(number) - 3):
+        if number[pos] == OPEN and number[pos + 3] == CLOSE \
+                and isinstance(number[pos + 1], int) and isinstance(number[pos + 2], int):
+            number[pos:pos + 4] = [3 * number[pos + 1] + 2 * number[pos + 2]]
             return number
     return None
 
@@ -106,14 +105,15 @@ def magnitude(number):
     return number[0]
 
 
-def run(fname):
+def run(f_name):
     numbers = []
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         if line.strip() != "":
             number = parse_number(line.strip())
             numbers.append(number)
     result = 0
+    # just run through all combinations and check for the highest magnitude
     for a in range(0, len(numbers)):
         for b in range(0, len(numbers)):
             if a != b:
@@ -121,10 +121,10 @@ def run(fname):
                 second = numbers[b]
                 num = add(first, second)
                 mag = magnitude(reduce_number(num).copy())
-#                print(first, "+", second, "=", num, mag)
                 if mag > result:
                     result = mag
     print(result)
+
 
 def test_reduce():
     print(reduce_number(parse_number("[[[[[9,8],1],2],3],4]")))
@@ -134,7 +134,6 @@ def test_reduce():
     print(reduce_number(parse_number("[[3, [2, [8, 0]]], [9, [5, [4, [3, 2]]]]]")))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-#    test_reduce()
+    #    test_reduce()
     run('../data/day18.txt')

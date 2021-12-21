@@ -3,6 +3,9 @@ def parse_pattern(line):
     return p[0], p[1]
 
 
+# instead of working on the chain directly, we know that each replacement consumes the original pattern
+# and replaces it with two new patterns
+# this is deterministic, so we can do it for all occurrences at once - hence we just store the counts for each pattern
 def replace(counts, patterns, char_counts):
     result = dict.fromkeys(counts.keys(), 0)
     for c in counts:
@@ -23,11 +26,11 @@ def add_char_count(char_counts, c, count):
     if c not in char_counts:
         char_counts[c] = count
     else:
-        char_counts[c] = char_counts[c] + count
+        char_counts[c] += count
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     start = fin.readline().strip()
 
     patterns = {}
@@ -39,22 +42,23 @@ def run(fname):
             patterns[mapping[0]] = mapping[1]
             counts[mapping[0]] = 0
 
-    for i in range(0, len(start)-1):
-        p = start[i:i+2]
+    # count how often each pattern occurs in the start polymer
+    # also count how often each character is in the polymer
+    for i in range(0, len(start) - 1):
+        p = start[i:i + 2]
         if p in patterns:
             if p in counts:
-                counts[p] = counts[p] + 1
+                counts[p] += 1
             else:
                 counts[p] = 1
-        add_char_count(char_counts, start[i:i+1], 1)
-    add_char_count(char_counts, start[len(start)-1:len(start)], 1)
+        add_char_count(char_counts, start[i:i + 1], 1)
+    add_char_count(char_counts, start[len(start) - 1:len(start)], 1)
 
     for r in range(0, 40):
         counts = replace(counts, patterns, char_counts)
 
     min_c = min(char_counts.values())
     max_c = max(char_counts.values())
-    print(min_c, max_c)
     print(max_c - min_c)
 
 

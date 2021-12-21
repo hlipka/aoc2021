@@ -23,7 +23,7 @@ class Node:
 
 
 def parse_line(line):
-    result = list(map(lambda c: Node(int(c)-int(0)), list(line)))
+    result = list(map(lambda c: Node(int(c) - int(0)), list(line)))
     return result
 
 
@@ -40,13 +40,13 @@ def find_path(map, open_list, goal_x, goal_y):
 
         nbs = []
         if n.x > 0:
-            nbs.append(map[n.y][n.x-1])
+            nbs.append(map[n.y][n.x - 1])
         if n.x < goal_x:
-            nbs.append(map[n.y][n.x+1])
+            nbs.append(map[n.y][n.x + 1])
         if n.y > 0:
-            nbs.append(map[n.y-1][n.x])
+            nbs.append(map[n.y - 1][n.x])
         if n.y < goal_y:
-            nbs.append(map[n.y+1][n.x])
+            nbs.append(map[n.y + 1][n.x])
 
         for nb in nbs:
             if nb in open_list:
@@ -81,8 +81,8 @@ def copy_cave(map, ofs):
     return result
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     map = []
     open_list = []
     for line in fin:
@@ -109,9 +109,8 @@ def run(fname):
             full_map[y][x].y = y
             open_list.append(full_map[x][y])
 
-    find_path(full_map, open_list, max_x-1, max_y-1)
+    find_path(full_map, open_list, max_x - 1, max_y - 1)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day15.txt')

@@ -1,12 +1,15 @@
 import numpy as np
 
+
 def parse_line(line, amap):
     amap.append(list(map(lambda x: int(x), list(line))))
 
 
 def is_low(sl):
     center = sl[1, 1]
-    return center < sl[0, 0] and center < sl[0, 1] and center < sl[0, 2] and center < sl[1, 0] and center < sl[1, 2] and center < sl[2, 0] and center < sl[2, 1] and center < sl[2, 2]
+    return center < sl[0, 0] and center < sl[0, 1] and center < sl[0, 2] and center < sl[1, 0] and center < sl[
+        1, 2] and center < sl[2, 0] and center < sl[2, 1] and center < sl[2, 2]
+
 
 # recursive flood fill in the map
 def search_basin(amap, row, col, fields):
@@ -15,10 +18,10 @@ def search_basin(amap, row, col, fields):
         return
     fields.append(h)
     amap[row, col] = 11
-    search_basin(amap, row-1, col, fields)
-    search_basin(amap, row+1, col, fields)
-    search_basin(amap, row, col-1, fields)
-    search_basin(amap, row, col+1, fields)
+    search_basin(amap, row - 1, col, fields)
+    search_basin(amap, row + 1, col, fields)
+    search_basin(amap, row, col - 1, fields)
+    search_basin(amap, row, col + 1, fields)
 
 
 def find_basin(amap, row, col):
@@ -27,9 +30,9 @@ def find_basin(amap, row, col):
     return len(fields)
 
 
-def run(fname):
+def run(f_name):
     amap = []
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         if line.strip() != "":
             parse_line(line.strip(), amap)
@@ -50,12 +53,11 @@ def run(fname):
     basins = []
     for lp in lows:
         row, col = lp
-        basins.append(find_basin(amap, row+1, col+1))
+        basins.append(find_basin(amap, row + 1, col + 1))
 
     basins.sort(reverse=True)
     print(basins[0] * basins[1] * basins[2])
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day09.txt')

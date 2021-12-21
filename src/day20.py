@@ -43,7 +43,7 @@ def enhance(image, rules, round):
     # run through all pixels of image, +1 border pixel since the image grows
     for x in range(1, image.shape[0] - 1):
         for y in range(1, image.shape[1] - 1):
-            target[x, y] = get_pixel(image[x-1:x+2, y-1:y+2], rules)
+            target[x, y] = get_pixel(image[x - 1:x + 2, y - 1:y + 2], rules)
     return target
 
 
@@ -53,10 +53,11 @@ def enhance_image(img, rules, rounds):
         target = enhance(target, rules, r)
     return target
 
-def run(fname):
+
+def run(f_name):
     rules = None
     image = []
-    fin = open(fname)
+    fin = open(f_name)
     for line in fin:
         line = line.strip()
         if line != '':
@@ -69,7 +70,7 @@ def run(fname):
     img = enhance_image(img, rules, 50)  # 2 rounds for part 1
     print(sum(img.flat))
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     run('../data/day20.txt')
     # day20test.txt has the same problem as the real data set (flipping all pixels every time),

@@ -1,6 +1,6 @@
 class Node:
     def __init__(self, value):
-        self.value = int(value)-int(0)
+        self.value = int(value) - int(0)
         self.pre = None
         self.length = 10000000
         self.x = 0
@@ -36,13 +36,13 @@ def find_path(map, open_list, goal_x, goal_y):
             print("finished ", n.length)
         nbs = []
         if n.x > 0:
-            nbs.append(map[n.y][n.x-1])
+            nbs.append(map[n.y][n.x - 1])
         if n.x < goal_x:
-            nbs.append(map[n.y][n.x+1])
+            nbs.append(map[n.y][n.x + 1])
         if n.y > 0:
-            nbs.append(map[n.y-1][n.x])
+            nbs.append(map[n.y - 1][n.x])
         if n.y < goal_y:
-            nbs.append(map[n.y+1][n.x])
+            nbs.append(map[n.y + 1][n.x])
         for nb in nbs:
             if nb in open_list:
                 alt = n.length + nb.value
@@ -52,8 +52,8 @@ def find_path(map, open_list, goal_x, goal_y):
                     open_list.sort(reverse=True)
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     map = []
     open_list = []
     y = 0
@@ -69,9 +69,8 @@ def run(fname):
             y = y + 1
             map.append(row)
 
-    find_path(map, open_list, len(map[9])-1, y-1)
+    find_path(map, open_list, len(map[9]) - 1, y - 1)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day15.txt')

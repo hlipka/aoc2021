@@ -13,7 +13,7 @@ def parse_fold(line):
 
 def do_fold_x(dots, line):
     r = dots[..., :line]
-    f = dots[..., line+1:]
+    f = dots[..., line + 1:]
     f = np.fliplr(f)
     m = r.__or__(f)
     return m
@@ -21,7 +21,7 @@ def do_fold_x(dots, line):
 
 def do_fold_y(dots, line):
     r = dots[:line, ...]
-    f = dots[line+1:, ...]
+    f = dots[line + 1:, ...]
     f = np.flipud(f)
     m = r.__or__(f)
     return m
@@ -34,8 +34,8 @@ def do_fold(dots, fold_cmd):
         return do_fold_y(dots, fold_cmd[1])
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     dot_list = []
     fold_list = []
     max_x = 0
@@ -51,16 +51,18 @@ def run(fname):
                 max_x = max(max_x, dots[0])
                 max_y = max(max_y, dots[1])
 
-    # swap x and y axis to get it visually as in the instructions
+    # swap x- and y-axis to get it visually as in the instructions
     dots = np.zeros((max_y + 1, max_x + 1), dtype=np.int8, order='C')
+    # take the dot coordinates and place then on the map
     for dot in dot_list:
         dots[dot[1], dot[0]] = 1
 
+    # now fold
     dots = do_fold(dots, fold_list[0])
 
+    # and count what is left
     print(sum(dots.flatten()))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     run('../data/day13.txt')

@@ -19,8 +19,8 @@ def filter_line(line, pos, value):
     return line[pos] == value
 
 
-def run(fname):
-    fin = open(fname)
+def run(f_name):
+    fin = open(f_name)
     lines = list(map(map_bits, fin.readlines()))
     fin.close()
 
@@ -28,15 +28,15 @@ def run(fname):
     while len(lines) != 1:
         ones = count_bits(lines, pos)
         filter_bit = 0
-        if ones >= len(lines)-ones:
+        if ones >= len(lines) - ones:
             filter_bit = 1
         lines = list(filter(lambda l: filter_line(l, pos, filter_bit), lines))
         pos = pos + 1
     print(lines)
-    o2 = ''.join(map(lambda b:str(b), lines[0]))
+    o2 = ''.join(map(lambda b: str(b), lines[0]))
     print(o2)
 
-    fin = open(fname)
+    fin = open(f_name)
     lines = list(map(map_bits, fin.readlines()))
     fin.close()
 
@@ -44,16 +44,15 @@ def run(fname):
     while len(lines) != 1:
         ones = count_bits(lines, pos)
         filter_bit = 1
-        if ones >= len(lines)-ones:
+        if ones >= len(lines) - ones:
             filter_bit = 0
         lines = list(filter(lambda l: filter_line(l, pos, filter_bit), lines))
         pos = pos + 1
     print(lines)
-    co2 = ''.join(map(lambda b:str(b), lines[0]))
+    co2 = ''.join(map(lambda b: str(b), lines[0]))
     print(co2)
-    print(int('0b'+o2,0)*int('0b'+co2,0))
+    print(int('0b' + o2, 0) * int('0b' + co2, 0))
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     run('../data/day03.txt')
-
