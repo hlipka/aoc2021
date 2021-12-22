@@ -22,8 +22,8 @@ class Region:
         self.z_start = int(match.group(5))
         self.z_end = int(match.group(6))
 
-    def fill_region(self, amap):
-        amap[
+    def fill_region(self, world):
+        world[
             self.x_start + self.ofs:self.x_end + self.ofs + 1,
             self.y_start + self.ofs:self.y_end + self.ofs + 1,
             self.z_start + self.ofs:self.z_end + self.ofs + 1] = self.value
@@ -37,7 +37,7 @@ class Region:
 
 def run(f_name):
     fin = open(f_name)
-    amap = np.zeros((101, 101, 101), dtype=int)
+    world = np.zeros((101, 101, 101), dtype=int)
 
     for line in fin:
         line = line.strip()
@@ -45,14 +45,14 @@ def run(f_name):
             continue
         region = Region(line)
         if region.in_range():
-            region.fill_region(amap)
+            region.fill_region(world)
 
-    print(amap.shape)
+    print(world.shape)
 
     # create a new array which marks all turned on cubes
-    mark = amap.flat == 1
+    mark = world.flat == 1
     # select these elements, and count them up
-    cubes = amap.flat[mark]
+    cubes = world.flat[mark]
     print(len(cubes))
 
 
