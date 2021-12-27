@@ -1,3 +1,4 @@
+# map the PODs to their rooms
 def get_pods(world):
     pods = {}
     for r in world:
@@ -97,7 +98,7 @@ distances = {
 }
 
 
-# add the remaining distances for the slots
+# add the remaining distances for the slots, we can determine them from the top position
 def fix_distances():
     global distances
     for room in distances:
@@ -119,12 +120,6 @@ def fix_distances():
             dists['D2'] = d_d + 1
 
 
-# initial world
-# #############
-# #...........#
-# ###D#B#C#C###
-#   #D#A#B#A#
-#   #########
 def is_finished(world):
     return world['A1'].startswith('A') and \
            world['A2'].startswith('A') and \
@@ -148,6 +143,7 @@ def get_factor(amphore):
         return 1000
 
 
+# moves a POD in the world
 def do_move(move, world, pods):
     global distances
     pod = move[0]
@@ -158,6 +154,7 @@ def do_move(move, world, pods):
     pods[pod] = move_to
 
 
+# how much a move costs
 def get_cost(move, pods):
     global distances
     pod = move[0]
@@ -167,6 +164,7 @@ def get_cost(move, pods):
     return distances[move_from][move_to] * get_factor(pod)
 
 
+# where the slots are located in the floor
 def get_pos_for_slot(slot):
     s = slot[0]
     if s == 'A':
@@ -183,6 +181,7 @@ def is_slot(current_room):
     return ord(current_room[0]) > 64
 
 
+# check a move whether its legal or not
 def is_legal_move(world, current_room, target_room, pod):
     # the target must be empty
     if world[target_room] != '':
@@ -204,7 +203,7 @@ def is_legal_move(world, current_room, target_room, pod):
         # we are in the bottom slot - stay here always
         if current_room[1] == '2':
             return False
-        # we are in the top spot, and the bottom is the other amphore
+        # we are in the top spot, and the bottom is the other pod
         if world[current_room[0] + '2'] == pod_type:
             return False
 
@@ -235,6 +234,7 @@ def is_legal_move(world, current_room, target_room, pod):
     return True
 
 
+# gets a list of all possibole moves
 def get_moves(world, pods):
     moves = []
     for pod in pods.keys():
@@ -250,6 +250,7 @@ def get_moves(world, pods):
         # keep pod if it cannot move out of its current slot (top is occupied)
         if is_slot(current_room) and current_room[1] == '2' and world[current_room[0] + '1'] != '':
             continue
+        # when the pod could move from its current location, check all possible targets for legality
         potential = distances[current_room].keys()
         for target in potential:
             if is_legal_move(world, current_room, target, pod):
@@ -283,14 +284,17 @@ def simulate(world, pods):
 
 def memoize(f):
     memo = {}
+
     def helper(x, y):
         k = str(x)
         if k not in memo:
             memo[k] = f(x, y)
         return memo[k]
+
     return helper
 
 
+# we memoize how much finishing from a given state would cost
 simulate = memoize(simulate)
 
 

@@ -34,12 +34,13 @@ def run(f_name):
     print(a_map)  # row, column
     while True:
         did_change = False
+        # first, all EAST-facing cucumbers move
         next_map1 = np.zeros(a_map.shape, dtype=np.int8)
         for row in range(0, rows):
             for col in range(0, columns):
                 c = a_map[row, col]
                 if c == E:
-                    if a_map[row, (col + 1) % columns] == FREE:
+                    if a_map[row, (col + 1) % columns] == FREE:  # wrap around
                         next_map1[row, (col + 1) % columns] = E
                         next_map1[row, col] = FREE
                         did_change = True
@@ -47,6 +48,7 @@ def run(f_name):
                         next_map1[row, col] = E
                 elif c == S:  # we do not write FREE - it might overwrite already moved cucumbers
                     next_map1[row, col] = c
+        # then all SOUTH-facing cucumbers move, using the new state
         next_map2 = np.zeros(a_map.shape, dtype=np.int8)
         for row in range(0, rows):
             for col in range(0, columns):

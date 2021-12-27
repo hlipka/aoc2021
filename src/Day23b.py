@@ -1,3 +1,6 @@
+# this is the same as part 1, but we have a bigger starting state (as the slots are now 4 deep)
+# some of the checks are now generic to handle all 4 slot positions
+
 # map pods to their rooms
 def map_pods_to_rooms(world):
     pods = {}
@@ -246,16 +249,6 @@ def is_legal_move(world, current_room, target_room, pod):
         # (so we also move to the deepest position)
         if deeper_slots_not_occupied_by_same(pod_type, target_room, world):
             return False
-
-#    # we never move out of a correct slot when we shouldn't
-#    if is_slot(current_room) and current_room[0] == pod_type:
-#        # FIXME generify
-#        # we are in the bottom slot - stay here always
-#        if current_room[1] == '2':
-#            return False
-#        # we are in the top spot, and the bottom is the other amphore
-#        if world[current_room[0] + '2'] != '' and world[current_room[0] + '2'][0] == pod_type:
-#            return False
 
     # both are in a slot, so check the floor in-between
     if is_slot(current_room) and is_slot(target_room):

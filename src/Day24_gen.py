@@ -1,14 +1,14 @@
-from math import trunc
-
-input = 0
+input_count = 0
 
 
+# parse each input line, write a corresponding python code line
 def parse(line):
-    global input
+    global input_count
     parts = line.split(' ')
     if parts[0] == 'inp':
-        input += 1
-        print("    return z\n\ndef step"+str(input)+"(w, z):")
+        input_count += 1
+        # on input, we finish the previous function, and start a new one
+        print("    return z\n\ndef step" + str(input_count) + "(w, z):")
     if parts[0] == 'add':
         print("   ", parts[1], "=", parts[1], "+", parts[2])
     if parts[0] == 'mul':
@@ -26,7 +26,6 @@ def parse(line):
 
 def run(f_name):
     fin = open(f_name)
-    program = []
 
     for line in fin:
         line = line.strip()

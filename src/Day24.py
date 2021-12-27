@@ -4,6 +4,7 @@ count = 0
 results = []
 
 
+# this is the generated code from Day24_gen.py
 def step1(w, z):
     x = 0
     x = x + z
@@ -298,6 +299,18 @@ def step14(w, z):
     return z
 
 
+# end generated code
+
+# we work backwards through the MONAD code
+# each step only uses Z from the previous step, and takes W as its input (from 1..9)
+# we know step 14 must end up in 'z==0', so we check all possible inputs to get a list of possible Z input values
+# then we do the same with step13, getting a list of possible Z inputs which generate a Z from the previous set
+# this way we work upwards until we run 'step1'. There we must have a possible z input of 0, because this is the
+# startup condition for the ALU
+# when we now have the list of usable Z values after each step, we can start from step 1 (which gets the highest digit
+# as input) and determine the largest W value which results in a usable Z value. We then take this Z value for step2
+# and again look for the biggest W input. We work upwards until step 14, until we have the full serial
+# Similar for the smallest serial.
 def run():
     next_z = {}
     potential_next = set()
